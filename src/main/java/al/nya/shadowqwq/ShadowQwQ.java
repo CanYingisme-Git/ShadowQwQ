@@ -1,5 +1,8 @@
-package org.example.mirai.plugin;
+package al.nya.shadowqwq;
 
+import al.nya.pluginextendsapi.modules.ModuleManager;
+import al.nya.shadowqwq.modules.*;
+import al.nya.shadowqwq.runnable.GithubSubscriptionRunnable;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
@@ -8,6 +11,10 @@ import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -26,26 +33,23 @@ import net.mamoe.mirai.event.events.GroupMessageEvent;
  * 不用复制到 mirai-console-loader 或其他启动器中调试
  */
 
-public final class JavaPluginMain extends JavaPlugin {
-    public static final JavaPluginMain INSTANCE = new JavaPluginMain();
-    private JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("org.example.mirai-example", "0.1.0")
-                .info("EG")
+public final class ShadowQwQ extends JavaPlugin {
+    public static final ShadowQwQ INSTANCE = new ShadowQwQ();
+    private ShadowQwQ() {
+        super(new JvmPluginDescriptionBuilder("al.nya.shadowqwq", "0.1.0")
+                .info("Hi I'm a chat bot").name("ShadowQwQ")
                 .build());
     }
 
     @Override
     public void onEnable() {
-        getLogger().info("日志");
-        EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
-        eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {
-            //监听群消息
-            getLogger().info(g.getMessage().contentToString());
-
-        });
-        eventChannel.subscribeAlways(FriendMessageEvent.class, f -> {
-            //监听好友消息
-            getLogger().info(f.getMessage().contentToString());
-        });
+        ModuleManager.registerModule(new ShadowQwQCoreService());
+        ModuleManager.registerModule(new ACGImage());
+        ModuleManager.registerModule(new Hypixel());
+        ModuleManager.registerModule(new BackNudge());
+        ModuleManager.registerModule(new GithubSubscription());
+        ScheduledExecutorService service = Executors
+                .newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(new GithubSubscriptionRunnable(),5,60, TimeUnit.SECONDS);
     }
 }
