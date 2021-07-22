@@ -20,9 +20,9 @@ public class Broadcast extends Module {
         if (event instanceof FriendMessageEvent){
             if (((FriendMessageEvent) event).getSender().getId() == ShadowQwQ.SHADOW_ID){
                 String[] command = MessageUtil.getMessage(((FriendMessageEvent) event).getMessage()).split(" ");
-                if (command.length > 2) {
-                    if (command[1].equalsIgnoreCase("/broadcast")){
-                        String message = MessageUtil.getMessage(((FriendMessageEvent) event).getMessage()).replace(command[1]+" ","");
+                if (command.length >= 2) {
+                    if (command[0].equalsIgnoreCase("/broadcast")){
+                        String message = MessageUtil.getMessage(((FriendMessageEvent) event).getMessage()).replace(command[0]+" ","");
                         for (Group group : ((FriendMessageEvent) event).getBot().getGroups()) {
                             group.sendMessage(message);
                             try {
