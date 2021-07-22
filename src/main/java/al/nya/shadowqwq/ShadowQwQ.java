@@ -49,6 +49,7 @@ public final class ShadowQwQ extends JavaPlugin {
         ModuleManager.registerModule(new Hypixel());
         ModuleManager.registerModule(new BackNudge());
         ModuleManager.registerModule(new GithubSubscription());
+        ModuleManager.registerModule(new Broadcast());
         ScheduledExecutorService service = Executors
                 .newSingleThreadScheduledExecutor();
         service.scheduleAtFixedRate(new GithubSubscriptionRunnable(),5,60, TimeUnit.SECONDS);
