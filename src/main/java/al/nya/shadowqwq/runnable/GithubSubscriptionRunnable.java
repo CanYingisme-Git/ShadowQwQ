@@ -1,5 +1,6 @@
 package al.nya.shadowqwq.runnable;
 
+import al.nya.shadowqwq.ShadowQwQ;
 import al.nya.shadowqwq.utils.ACGUtil;
 import al.nya.shadowqwq.utils.github.RepoInfo;
 import al.nya.shadowqwq.utils.github.SubInfo;
@@ -39,6 +40,7 @@ public class GithubSubscriptionRunnable implements Runnable {
                         sb.append(subInfo.getRepoInfo().getName());
                         sb.append("在");
                         sb.append(subInfo.getRepoInfo().getPushed_at()+"提交了新的push");
+                        ShadowQwQ.INSTANCE.getLogger().info(sb.toString());
                         for (Bot instance : Bot.getInstances()) {
                             for (Long subGroup : subInfo.getSubGroups()) {
                                 instance.getGroup(subGroup).sendMessage(sb.toString());

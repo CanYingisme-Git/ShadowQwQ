@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class ShadowQwQ extends JavaPlugin {
     public static final ShadowQwQ INSTANCE = new ShadowQwQ();
+    public static final long SHADOW_ID = Long.parseLong("3192799549");
     private ShadowQwQ() {
         super(new JvmPluginDescriptionBuilder("al.nya.shadowqwq", "0.1.0")
                 .info("Hi I'm a chat bot").name("ShadowQwQ")

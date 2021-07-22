@@ -58,6 +58,16 @@ public class GithubSubscription extends Module {
                             List<Long> longs = subInfo.getSubGroups();
                             longs.add(((GroupMessageEvent) event).getGroup().getId());
                             subInfo.setSubGroups(longs);
+                            try {
+                                new File("./github/subs/subs/"+command[2].toUpperCase().replace("/",".")).createNewFile();
+                                FileWriter fileWritter = new FileWriter("./github/subs/subs/"+command[2].toUpperCase().replace("/","."));
+                                BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+                                bufferWritter.write(gson.toJson(subInfo));
+                                bufferWritter.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                ((GroupMessageEvent) event).getGroup().sendMessage(e.toString());
+                            }
                         }else {
                             SubInfo subInfo = new SubInfo();
                             subInfo.setRepoInfo(repoInfo);
