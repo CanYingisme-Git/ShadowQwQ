@@ -24,7 +24,11 @@ public class Broadcast extends Module {
                     if (command[0].equalsIgnoreCase("/broadcast")){
                         String message = MessageUtil.getMessage(((FriendMessageEvent) event).getMessage()).replace(command[0]+" ","");
                         for (Group group : ((FriendMessageEvent) event).getBot().getGroups()) {
-                            group.sendMessage(message);
+                            try{
+                                group.sendMessage(message);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {

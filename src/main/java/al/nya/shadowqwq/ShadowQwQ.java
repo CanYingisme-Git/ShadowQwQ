@@ -2,16 +2,19 @@ package al.nya.shadowqwq;
 
 import al.nya.pluginextendsapi.modules.ModuleManager;
 import al.nya.shadowqwq.modules.*;
+import al.nya.shadowqwq.runnable.DayNoticeTimerTask;
 import al.nya.shadowqwq.runnable.GithubSubscriptionRunnable;
+import al.nya.shadowqwq.webhook.WebHookHttpServer;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
-import net.mamoe.mirai.event.Event;
-import net.mamoe.mirai.event.EventChannel;
-import net.mamoe.mirai.event.GlobalEventChannel;
-import net.mamoe.mirai.event.events.FriendMessageEvent;
-import net.mamoe.mirai.event.events.GroupMessageEvent;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -49,9 +52,23 @@ public final class ShadowQwQ extends JavaPlugin {
         ModuleManager.registerModule(new Hypixel());
         ModuleManager.registerModule(new BackNudge());
         ModuleManager.registerModule(new GithubSubscription());
+        ModuleManager.registerModule(new HistoryToday());
         ModuleManager.registerModule(new Broadcast());
+        ModuleManager.registerModule(new Translate());
+        ModuleManager.registerModule(new ShadowQwQTest());
+        ModuleManager.registerModule(new Fun());
+        ModuleManager.registerModule(new GroupControl());
+        ModuleManager.registerModule(new DayNotice());
         ScheduledExecutorService service = Executors
                 .newSingleThreadScheduledExecutor();
         service.scheduleAtFixedRate(new GithubSubscriptionRunnable(),5,60, TimeUnit.SECONDS);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 24); // 控制时
+        calendar.set(Calendar.MINUTE, 0);       // 控制分
+        calendar.set(Calendar.SECOND, 0);
+       Timer timer = new Timer();
+        Date date = calendar.getTime();
+        timer.scheduleAtFixedRate(new DayNoticeTimerTask(),date,1000 * 60 * 60 * 24);
+        new WebHookHttpServer(8000);
     }
 }

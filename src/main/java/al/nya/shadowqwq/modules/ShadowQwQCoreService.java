@@ -10,6 +10,7 @@ import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.Event;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.mamoe.mirai.event.events.NewFriendRequestEvent;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.SingleMessage;
@@ -65,6 +66,8 @@ public class ShadowQwQCoreService extends Module {
                     }
                 }
             }
+        }else if (event instanceof NewFriendRequestEvent){
+            ((NewFriendRequestEvent) event).accept();
         }
     }
     private void sendHelp(GroupMessageEvent event){
