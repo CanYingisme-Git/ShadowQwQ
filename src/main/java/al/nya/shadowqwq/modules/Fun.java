@@ -1,6 +1,7 @@
 package al.nya.shadowqwq.modules;
 
 import al.nya.pluginextendsapi.modules.Module;
+import al.nya.pluginextendsapi.modules.ModuleManager;
 import al.nya.shadowqwq.ShadowQwQ;
 import net.mamoe.mirai.event.Event;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
@@ -17,6 +18,10 @@ public class Fun extends Module {
     public void onEvent(Event event) {
         if (event instanceof GroupMessageEvent){
             if (((GroupMessageEvent) event).getMessage().get(1).toString().split("")[0].equals("/")) {
+                GroupControl groupControl = (GroupControl) ModuleManager.getModule("GroupControl");
+                if (!groupControl.isEnableGroup(((GroupMessageEvent) event).getGroup(),this)){
+                    return;
+                }
                 String[] command = ((GroupMessageEvent) event).getMessage().get(1).toString().split(" ");
                 if (command.length == 3){
                     if (command[0].equalsIgnoreCase("/bmi")){

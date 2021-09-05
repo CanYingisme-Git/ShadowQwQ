@@ -59,6 +59,7 @@ public final class ShadowQwQ extends JavaPlugin {
         ModuleManager.registerModule(new Fun());
         ModuleManager.registerModule(new GroupControl());
         ModuleManager.registerModule(new DayNotice());
+        ModuleManager.registerModule(new MessageForward());
         ScheduledExecutorService service = Executors
                 .newSingleThreadScheduledExecutor();
         service.scheduleAtFixedRate(new GithubSubscriptionRunnable(),5,60, TimeUnit.SECONDS);

@@ -1,12 +1,14 @@
 package al.nya.shadowqwq.modules;
 
 import al.nya.pluginextendsapi.modules.Module;
+import al.nya.pluginextendsapi.modules.ModuleManager;
 import al.nya.shadowqwq.ShadowQwQ;
 import al.nya.shadowqwq.utils.MessageUtil;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.event.Event;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
+import net.mamoe.mirai.event.events.GroupMessageEvent;
 
 import java.util.Random;
 
@@ -24,15 +26,22 @@ public class Broadcast extends Module {
                     if (command[0].equalsIgnoreCase("/broadcast")){
                         String message = MessageUtil.getMessage(((FriendMessageEvent) event).getMessage()).replace(command[0]+" ","");
                         for (Group group : ((FriendMessageEvent) event).getBot().getGroups()) {
-                            try{
-                                group.sendMessage(message);
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
+                            GroupControl groupControl = (GroupControl) ModuleManager.getModule("GroupControl");
                             try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                if (groupControl.isEnableGroup(group,this)){
+                                    try{
+                                       group.sendMessage(message);
+                                    }catch (Exception e){
+                                      e.printStackTrace();
+                                    }
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                      e.printStackTrace();
+                                    }
+                            }
+                            }catch (Exception e){
+                                ((FriendMessageEvent) event).getSender().sendMessage(e.getMessage());
                             }
                         }
                     }

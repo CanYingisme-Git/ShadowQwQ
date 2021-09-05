@@ -37,6 +37,15 @@ public class GroupControl extends Module {
                             }finally {
                                 ((GroupMessageEvent) event).getGroup().sendMessage("已将群"+((GroupMessageEvent) event).getGroup().getId()+"的模块"+module.getName()+"状态设置为disable");
                             }
+                        }else if (command[1].equalsIgnoreCase("enable")){
+                            try {
+                                enable(module,((GroupMessageEvent) event).getGroup());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                ((GroupMessageEvent) event).getGroup().sendMessage(e.toString());
+                            }finally {
+                                ((GroupMessageEvent) event).getGroup().sendMessage("已将群"+((GroupMessageEvent) event).getGroup().getId()+"的模块"+module.getName()+"状态设置为disable");
+                            }
                         }
                     }
                }
@@ -81,6 +90,50 @@ public class GroupControl extends Module {
             ModuleGroup mg = new ModuleGroup();
             mg.id = g.getId();
             mg.enable = false;
+            mc.groups.add(mg);
+            modules.modules = new ArrayList<ModuleChild>();
+            modules.modules.add(mc);
+            save(modules);
+        }
+    }
+    public void enable(Module module,Group g) throws IOException {
+        File file = new File("./modules.json");
+        if (file.exists()){
+            Modules modules = new Gson().fromJson(ACGUtil.readJson(file.getPath()),Modules.class);
+            for (ModuleChild moduleChild : modules.modules) {
+                if (moduleChild.name.equals(module.getName())){
+                    for (ModuleGroup group : moduleChild.groups) {
+                        if (group.id == g.getId()){
+                            group.enable = false;
+                            save(modules);
+                            return;
+                        }
+                    }
+                    ModuleGroup mg = new ModuleGroup();
+                    mg.id = g.getId();
+                    mg.enable = true;
+                    moduleChild.groups.add(mg);
+                    save(modules);
+                    return;
+                }
+            }
+            ModuleChild mc = new ModuleChild();
+            mc.groups = new ArrayList<ModuleGroup>();
+            mc.name = module.getName();
+            ModuleGroup mg = new ModuleGroup();
+            mg.id = g.getId();
+            mg.enable = true;
+            mc.groups.add(mg);
+            modules.modules.add(mc);
+            save(modules);
+        }else {
+            Modules modules = new Modules();
+            ModuleChild mc = new ModuleChild();
+            mc.groups = new ArrayList<ModuleGroup>();
+            mc.name = module.getName();
+            ModuleGroup mg = new ModuleGroup();
+            mg.id = g.getId();
+            mg.enable = true;
             mc.groups.add(mg);
             modules.modules = new ArrayList<ModuleChild>();
             modules.modules.add(mc);
