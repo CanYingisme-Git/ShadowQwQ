@@ -12,7 +12,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class Hypixel extends Module {
-    private String apiKey = "56281810-a5cb-404d-be0a-603a2c923cdf";
+    /**
+     * I hope u can change it to your APIKey
+     */
+    private String apiKey = "6cb66d68-49a5-4d51-b9c5-a5675ab33a24";
     private String token="v32Eo2Tw+qWI/eiKW3D8ye7l19mf1NngRLushOMHIO1aryun0/Y3N3YQCv/TqzaO/TFHw4=";
     public Hypixel() {
         super(ShadowQwQ.INSTANCE, "Hypixel");
@@ -88,7 +91,7 @@ public class Hypixel extends Module {
         sb.append("&name=");
         sb.append(playerName);
         try {
-            ACGUtil.downLoadFromUrl(sb.toString(),playerName.toUpperCase()+".json","./hypixel",token);
+            ACGUtil.downLoadFromUrl(sb.toString(),playerName.toUpperCase()+".json","./hypixel");
         } catch (IOException e) {
             e.printStackTrace();
         }

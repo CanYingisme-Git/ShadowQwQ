@@ -1,6 +1,9 @@
 package al.nya.shadowqwq.utils;
 
 import al.nya.shadowqwq.ShadowQwQ;
+import al.nya.shadowqwq.utils.acg.ACGInfo;
+import al.nya.shadowqwq.utils.acg.ImgGetInfo;
+import al.nya.shadowqwq.utils.acg.ImgInfo;
 import com.google.gson.Gson;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -11,45 +14,44 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class ACGUtil {
 
-    public static String download(){
-        //http://img.xjh.me/random_img.php
-        String picAPI ="http://img.xjh.me/random_img.php";
-        String token="v32Eo2Tw+qWI/eiKW3D8ye7l19mf1NngRLushO6CumLMHIO1aryun0/Y3N3YQCv/TqzaO/TFHw4=";
-        String uuid = getUUID();
-        String json = uuid+".json";
-        try {
-            downLoadFromUrl(picAPI+"?return=json",json,"./acg",token);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String jsonFile = readJson("./acg/"+json);
+    public static String download() throws IOException {
+        String APIRoot = "https://someacg.rocks/api/";
+        String api = "list?page=";
+        int randomPage = new Random().nextInt(5);
+        downLoadFromUrl(APIRoot + api + randomPage,
+                        "acgList.json","./acg");
         Gson gson = new Gson();
-        ACGInfo acgInfo = gson.fromJson(jsonFile,ACGInfo.class);
-        String img = uuid+".jpg";
-        try {
-            downLoadFromUrl("http:"+acgInfo.getImg(),img,"./acg",token);
-        } catch (IOException e) {
-            e.printStackTrace();
+        ACGInfo acgInfo = gson.fromJson(readJson("./acg/acgList.json"),ACGInfo.class);
+        if (acgInfo != null) {
+            if (acgInfo.getStatus() == 200){
+                List<ImgInfo> imgInfo = acgInfo.getList();
+                int randomImg = new Random().nextInt(imgInfo.size());
+                downLoadFromUrl(APIRoot+"detail/"+imgInfo.get(randomImg).getIndex(),
+                            imgInfo.get(randomImg).getIndex()+".json","./acg/");
+                ImgGetInfo imgData = gson.fromJson(readJson("./acg/"+imgInfo.get(randomImg).getIndex()+".json"),ImgGetInfo.class);
+                downLoadFromUrl(APIRoot+"file/"+imgData.getData().getFile_name(),
+                        imgData.getData().getFile_name(),"./acg/");
+                return "./acg/"+imgData.getData().getFile_name();
+            }
         }
-        return "./acg/"+img;
+        return "./acg/";
     }
     public static String getUUID(){
         UUID uuid=UUID.randomUUID();
         String str = uuid.toString();
         return str;
     }
-    public static void  downLoadFromUrl(String urlStr,String fileName,String savePath,String toekn) throws IOException {
+    public static void  downLoadFromUrl(String urlStr,String fileName,String savePath) throws IOException {
         URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         //设置超时间为3秒
         conn.setConnectTimeout(3*1000);
-        //防止屏蔽程序抓取而返回403错误
-        conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-        conn.setRequestProperty("lfwywxqyh_token",toekn);
 
         //得到输入流
         InputStream inputStream = conn.getInputStream();

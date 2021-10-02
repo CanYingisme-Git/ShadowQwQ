@@ -25,8 +25,8 @@ public class DayNotice {
         String dataR = formatter.format(date);
         file.mkdir();
         try {
-            ACGUtil.downLoadFromUrl(API,dataS +".json","./notice",token);
-            ACGUtil.downLoadFromUrl(API2,dataS +"Today.json","./notice",token);
+            ACGUtil.downLoadFromUrl(API,dataS +".json","./notice");
+            ACGUtil.downLoadFromUrl(API2,dataS +"Today.json","./notice");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -40,7 +40,7 @@ public class HistoryToday extends Module {
                         String dataS = formatter.format(date);
                         new File("./notice").mkdir();
                         try {
-                            ACGUtil.downLoadFromUrl(API2,dataS +"Today.json","./notice",token);
+                            ACGUtil.downLoadFromUrl(API2,dataS +"Today.json","./notice");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

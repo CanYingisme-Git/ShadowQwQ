@@ -16,7 +16,6 @@ public class Broadcast extends Module {
     public Broadcast() {
         super(ShadowQwQ.INSTANCE,"Broadcast");
     }
-
     @Override
     public void onEvent(Event event) {
         if (event instanceof FriendMessageEvent){

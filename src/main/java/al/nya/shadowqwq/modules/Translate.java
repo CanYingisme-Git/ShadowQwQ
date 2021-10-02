@@ -55,7 +55,7 @@ public class Translate extends Module {
                         new File("./translate").mkdir();
                         String uuid = UUID.randomUUID().toString();
                         try {
-                            ACGUtil.downLoadFromUrl(url, uuid+".json","./translate",token);
+                            ACGUtil.downLoadFromUrl(url, uuid+".json","./translate");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

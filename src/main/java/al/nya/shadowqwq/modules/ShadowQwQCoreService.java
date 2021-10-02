@@ -18,6 +18,7 @@ import net.mamoe.mirai.utils.ExternalResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class ShadowQwQCoreService extends Module {
@@ -35,14 +36,7 @@ public class ShadowQwQCoreService extends Module {
                     if (command[0].equalsIgnoreCase("/help")){
                         sendHelp((GroupMessageEvent) event);
                     }
-                    if (command[0].equalsIgnoreCase("/acgimage")){
-                        //this.getPlugin().getLogger().info("ACGImage");
-                        if(ModuleManager.getModule("ACGImage").isEnable()) {
-                            sendACGImage((GroupMessageEvent) event);
-                        }else {
-                            ((GroupMessageEvent) event).getGroup().sendMessage("模块ACGImage为禁用状态");
-                        }
-                    }
+
                 }else if (command.length ==2){
                     if (command[0].equalsIgnoreCase("/nudge")){
                         String unformattedTarget = command[1];
@@ -73,7 +67,7 @@ public class ShadowQwQCoreService extends Module {
     private void sendHelp(GroupMessageEvent event){
 
     }
-    private void sendACGImage(GroupMessageEvent event){
+    private void sendACGImage(GroupMessageEvent event) throws IOException {
         Image image = event.getGroup().uploadImage(ExternalResource.create(new File(ACGUtil.download())));
         event.getGroup().sendMessage(image);
     }
